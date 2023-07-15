@@ -29,8 +29,10 @@ df2 = pd.read_excel("instrument_info.xlsx",sheet_name="instrument_function",usec
 # converting string into -> list -> np.array
 df2["coeffs"] = df2['coeffs'].apply(eval).apply(np.array) 
 # converting parametrs into functions
-df2["functions"] = df2["coeffs"].apply(Polynomial)
-   
+df2["function"] = df2["coeffs"].apply(Polynomial)
+
+for instru_name, fun in zip(df2["name"],df2["function"]):
+    instruments[instru_name].function = fun 
 #print(instruments["AOM"].channel.address)
 #print(channel["D"][1][1].instrument.name)
 '''
