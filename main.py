@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 from functions import *
 from functools import reduce
-print("Hello")
+
 address_of_timeline_file = "time_sequence.xlsx"
 clk_time = 2     # Clk time is 2 microseconds = 500kHz
 df = pd.read_excel(address_of_timeline_file,sheet_name="time_sequence",usecols=[0,4,5,6],na_filter=False) # reading time sequence file
