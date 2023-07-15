@@ -1,5 +1,7 @@
 from channels import *
 import pandas as pd
+import numpy as np
+from numpy.polynomial import Polynomial
 
 
 df = pd.read_excel("instrument_info.xlsx") 
@@ -23,7 +25,12 @@ for i in df.index:
     device = Instrument(name=df['name'][i],channel=chan,delay = df['delay'][i]) # assigning channel to instrument
     chan.instrument = device # assigning instrument to channel
     instruments[device.name] = device
-
+df2 = pd.read_excel("instrument_info.xlsx",sheet_name="instrument_function",usecols=[0,1,2],na_filter=False)
+# converting string into -> list -> np.array
+df2["coeffs"] = df2['coeffs'].apply(eval).apply(np.array) 
+# converting parametrs into functions
+df2["functions"] = df2["coeffs"].apply(Polynomial)
+   
 #print(instruments["AOM"].channel.address)
 #print(channel["D"][1][1].instrument.name)
 '''
