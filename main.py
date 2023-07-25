@@ -1,4 +1,4 @@
-from instruments import instruments
+from instruments import instruments,instru_func
 import pandas as pd
 import numpy as np
 from functions import *
@@ -19,7 +19,17 @@ df = df.sort_values(by = ['Absolute time'],ascending=True,ignore_index=True)
 #adjusting origin of absolute time to zero
 df["Absolute time"] = df["Absolute time"] - df["Absolute time"][0]
 df.to_excel("2_time_info.xlsx",engine='openpyxl')  # to check occasionally
-
+# Block to convert user input of analog signal to required number using calibrated curve
+for idx, row in df.iterrows():
+    instru = row["Instrument"]
+    stat = row["status"]
+    if instruments[instru].channel.type == "A":
+        print(instruments[instru].name)
+        print(stat)
+        print(instru_func[instru])
+        df.at[idx, "status"] = instru_func[instru](stat)
+        print(df.at[idx, "status"])
+df.to_excel("6_analog_trans.xlsx",engine='openpyxl')  # to check occasionally
 def merge_lists(x):
     if isinstance(x, list):
         return [item for sublist in x for item in sublist]
