@@ -41,7 +41,7 @@ def generate_data(x, y,z):
         data_list.reverse()
         return data_list
 #df["data"] = df.apply(lambda x:x["Channel Object"].gen_data(x["status"]), axis=1)# gen_data(df["status"]))
-df_merged["signal number"] = (df['Absolute time'] / 2).astype(int)
+df_merged["signal number"] = (df_merged['Absolute time'] / 2).astype(int)
 df_merged["data"] = df_merged.apply(lambda row:generate_data(row['Channel Object'],row['status'],row['signal number']), axis=1)# gen_data(df["status"]))
 df_merged.to_excel("4_with_data.xlsx",engine='openpyxl')
 # Define a lambda function to convert binary lists to integers
