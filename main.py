@@ -25,7 +25,7 @@ def merge_lists(x):
         return [item for sublist in x for item in sublist]
     else:
         return x
-df_merged = df.groupby('Absolute time').agg({'Instrument': merge_lists,'Time': merge_lists, 'status': merge_lists, 'Channel Object': merge_lists, 'Cumulitive time': merge_lists,'Instrument delay': merge_lists }).reset_index()
+df_merged = df.groupby('Absolute time').agg({'Instrument': list,'Time': list, 'status': merge_lists, 'Channel Object': merge_lists, 'Cumulitive time': list,'Instrument delay': list }).reset_index()
 
 df_merged.to_excel("3_merging.xlsx",engine='openpyxl')  # to check occasionally
 
