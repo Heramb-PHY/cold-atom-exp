@@ -42,6 +42,7 @@ class Analog_Channel(Channel):
         else:
             self.connection = "connected"
             self.instrument = instrument
+        assert number >= 0 and number < 9 , f"Analog Card Number {analog_card.number}  has {number} channel."
         if number == 1:
             self.address = [0,0,0] + analog_card.address
         if number == 2:
