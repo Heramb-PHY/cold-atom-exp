@@ -46,17 +46,17 @@ class Analog_Channel(Channel):
         if number == 1:
             self.address = [0,0,0] + analog_card.address
         if number == 2:
-            self.address = [0,0,1] + analog_card.address
+            self.address = [1,0,0] + analog_card.address
         if number == 3:
             self.address = [0,1,0] + analog_card.address
         if number == 4:
-            self.address = [0,1,1] + analog_card.address
+            self.address = [1,1,0] + analog_card.address
         if number == 5:
-            self.address = [1,0,0] + analog_card.address
+            self.address = [0,0,1] + analog_card.address
         if number == 6:
             self.address = [1,0,1] + analog_card.address
         if number == 7:
-            self.address = [1,1,0] + analog_card.address
+            self.address = [0,1,1] + analog_card.address
         if number == 8:
             self.address = [1,1,1] + analog_card.address
 
