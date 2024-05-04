@@ -78,7 +78,7 @@ class Analog_Channel(Channel):
         '''
         binary = bin(integer)
         binary_list = list(binary)
-        binary_list.reverse()  # removing revesrse function
+        binary_list.reverse()  
         for i in range(len(binary)-2):
             data[15-i]=int(binary_list[i])
         data.reverse()
