@@ -62,7 +62,7 @@ class Analog_Channel(Channel):
 
     def gen_data(self,value):
 
-        #Calibation function here
+        #transfer function here
 
         data = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 

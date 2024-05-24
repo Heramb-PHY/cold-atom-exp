@@ -1,9 +1,15 @@
 from channels import *
 import pandas as pd
+import numpy as np
+from numpy.polynomial import Polynomial
 
 
 df = pd.read_excel("instrument_info.xlsx") 
-
+df2 = pd.read_excel("instrument_info.xlsx",sheet_name="instrument_function",usecols=[0,1,2],na_filter=False)
+# converting string into -> list -> np.array
+df2["coeffs"] = df2['coeffs'].apply(eval).apply(np.array) 
+# converting parametrs into functions
+df2["function"] = df2["coeffs"].apply(Polynomial)
 class Instrument:
 
     def __init__(self,name:str,channel,delay:float=0):
@@ -17,13 +23,16 @@ class Instrument:
         self.channel = channel
         #Instrument.all.append(self)
 instruments = {}
-
+instru_func = {}
 for i in df.index:
     chan=channel[df['card'][i]][df['card_number'][i]][df['channel_number'][i]] # calling particular channel
     device = Instrument(name=df['name'][i],channel=chan,delay = df['delay'][i]) # assigning channel to instrument
     chan.instrument = device # assigning instrument to channel
     instruments[device.name] = device
-
+    
+for instru_name, fun in zip(df2["name"],df2["function"]):
+    instru_func[instru_name] = fun 
+    print(type(instru_func[instru_name]))
 #print(instruments["AOM"].channel.address)
 #print(channel["D"][1][1].instrument.name)
 '''
