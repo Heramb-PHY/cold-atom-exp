@@ -1,7 +1,4 @@
-__pycache__/cards.cpython-312.pyc
-__pycache__/channels.cpython-312.pyc
-__pycache__/functions.cpython-312.pyc
-__pycache__/instruments.cpython-312.pyc
+__pycache__/*.pyc
 1_user_input.xlsx
 2_time_info.xlsx
 3_merging.xlsx
@@ -10,3 +7,4 @@ __pycache__/instruments.cpython-312.pyc
 6_analog_trans.xlsx
 text.txt
 time_sequence.xlsx
+
