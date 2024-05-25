@@ -6,7 +6,7 @@ from functools import reduce
 
 address_of_timeline_file = "time_sequence.xlsx"
 clk_time = 2     # Clk time is 2 microseconds = 500kHz
-df = pd.read_excel(address_of_timeline_file,sheet_name="time_sequence",usecols=[0,4,5,6],na_filter=False) # reading time sequence file
+df = pd.read_excel(address_of_timeline_file,sheet_name="time_sequence",usecols=["Instrument","Time","status","Time_rep"],dtype={"Instrument":str,"Time":int,"status":float,"Time_rep":str},na_filter=False) # reading time sequence file
 df.to_excel("1_user_input.xlsx",engine='openpyxl') # to check occasionally
 # adding new columns in dataframe
 df["Channel Object"] = df["Instrument"].apply(lambda x: instruments[x].channel)
