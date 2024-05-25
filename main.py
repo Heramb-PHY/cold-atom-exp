@@ -24,11 +24,7 @@ for idx, row in df.iterrows():
     instru = row["Instrument"]
     stat = row["status"]
     if instruments[instru].channel.type == "A":
-        print(instruments[instru].name)
-        print(stat)
-        print(instru_func[instru])
         df.at[idx, "status"] = instru_func[instru](stat)
-        print(df.at[idx, "status"])
 df.to_excel("6_analog_trans.xlsx",engine='openpyxl')  # to check occasionally
 def merge_lists(x):
     if isinstance(x, list):

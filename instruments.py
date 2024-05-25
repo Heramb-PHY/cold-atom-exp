@@ -32,7 +32,6 @@ for i in df.index:
     
 for instru_name, fun in zip(df2["name"],df2["function"]):
     instru_func[instru_name] = fun 
-    print(type(instru_func[instru_name]))
 #print(instruments["AOM"].channel.address)
 #print(channel["D"][1][1].instrument.name)
 '''
