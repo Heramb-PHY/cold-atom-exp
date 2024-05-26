@@ -18,6 +18,9 @@ df["Absolute time"] = df["Cumulitive time"] - df["Instrument delay"]
 df = df.sort_values(by = ['Absolute time'],ascending=True,ignore_index=True)
 #adjusting origin of absolute time to zero
 df["Absolute time"] = df["Absolute time"] - df["Absolute time"][0]
+def make_even(x):
+    return x + 1 if x % 2 != 0 else x
+df['Absolute time'] = df['Absolute time'].apply(make_even)
 df.to_excel("2_time_info.xlsx",engine='openpyxl')  # to check occasionally
 # Block to convert user input of analog signal to required number using calibrated curve
 for idx, row in df.iterrows():
