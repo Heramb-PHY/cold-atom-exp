@@ -8,3 +8,4 @@ __pycache__/*.pyc
 text.txt
 time_sequence.xlsx
 
+UI/gui_2.py
