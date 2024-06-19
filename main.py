@@ -18,9 +18,18 @@ df["Absolute time"] = df["Cumulitive time"] - df["Instrument delay"]
 df = df.sort_values(by = ['Absolute time'],ascending=True,ignore_index=True)
 #adjusting origin of absolute time to zero
 df["Absolute time"] = df["Absolute time"] - df["Absolute time"][0]
+
 def make_even(x):
     return x + 1 if x % 2 != 0 else x
-df['Absolute time'] = df['Absolute time'].apply(make_even)
+df['Absolute time'] = df['Absolute time'].apply(make_even)  # This will ensure that time will be always multiple of 2 microsec
+
+def check_consecutive(df):
+    for i in range(1, len(df)):
+        if df.loc[i, 'Absolute time'] == df.loc[i-1, 'Absolute time'] and df.loc[i, 'Instrument'] == df.loc[i-1, 'Instrument'] and df.loc[i,'Channel Type'] == 'A':
+            raise RuntimeError(f"Warning: Consecutive same time and instrument {df.loc[i, 'Instrument']} found at index {i-1} and {i}")
+
+check_consecutive(df)
+
 df.to_excel("2_time_info.xlsx",engine='openpyxl')  # to check occasionally
 # Block to convert user input of analog signal to required number using calibrated curve
 for idx, row in df.iterrows():
