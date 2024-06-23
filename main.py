@@ -25,8 +25,14 @@ df['Absolute time'] = df['Absolute time'].apply(make_even)  # This will ensure t
 
 def check_consecutive(df):
     for i in range(1, len(df)):
-        if df.loc[i, 'Absolute time'] == df.loc[i-1, 'Absolute time'] and df.loc[i, 'Instrument'] == df.loc[i-1, 'Instrument'] and df.loc[i,'Channel Type'] == 'A':
-            raise RuntimeError(f"Warning: Consecutive same time and instrument {df.loc[i, 'Instrument']} found at index {i-1} and {i}")
+        if df.loc[i, 'Absolute time'] == df.loc[i-1, 'Absolute time'] :
+            if ( df.loc[i,'Channel Type'] == 'A' or df.loc[i-1,'Channel Type'] == 'A'):
+                raise RuntimeError(f"Warning: Instrument  {df.loc[i, 'Instrument']} and {df.loc[i-1, 'Instrument']} is overlapping with each other and one of them is analog " )
+            if df.loc[i, 'Instrument'] == df.loc[i-1, 'Instrument']:
+                raise RuntimeError(f"Warning: Consecutive same time and instrument {df.loc[i, 'Instrument']} found at index {i-1} and {i}")
+            if df.loc[i,'Channel Type'] == 'D':
+                if df.loc[i,'Instrument'].channel.digital_card.number !=  df.loc[i-1,'Instrument'].channel.digital_card.number :
+                    raise RuntimeError(f"Warning: {df.loc[i, 'Instrument']} is connected to digital card {df.loc[i,'Instrument'].channel.digital_card.number} while  {df.loc[i-1, 'Instrument']} is connected to digital card {df.loc[i-1,'Instrument'].channel.digital_card.number} and both are overlapping")
 
 check_consecutive(df)
 
