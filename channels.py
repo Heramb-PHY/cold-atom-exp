@@ -21,9 +21,9 @@ class Digital_Channel(Channel):
     def gen_data(self,value):
 
         data = self.digital_card.status
-        if value == "ON":
+        if int(value) == 1:
             data[self.number-1] = 1
-        if value == "OFF":
+        if int(value) == 0:
             data[self.number-1] = 0
         self.digital_card.update(data)
         #print("updated Data")
