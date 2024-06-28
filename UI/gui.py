@@ -43,9 +43,13 @@ class App(customtkinter.CTk):
                       ("Plot timeline",self.button_callback),
                       ("Generate Text File",lambda: threading.Thread(target=self.Generate_text_file).start()),
                       ("Execute", lambda: threading.Thread(target=self.execute).start()) ,
-                      ("Execute 100 times",lambda: threading.Thread(target=self.execute_multi, args=(100,)).start())]
+                      ("Execute 100 times",lambda: threading.Thread(target=self.execute_multi, args=(100,)).start()),
+                      ("Execute Multiple",lambda: threading.Thread(target=self.execute_manual_multi).start()),]
         self.button_frame_1 = ButtonFrame(self,attributes=attributes_1)
         self.button_frame_1.grid(row=0, column=0, padx=10, pady=(10, 0), sticky="nsw")
+
+        self.entry = customtkinter.CTkEntry(self.button_frame_1, placeholder_text="Multiple Entry")
+        self.entry.grid(row=6, column=0, padx=10, pady=(10, 0), sticky="nsw")
 
         attributes_2 = [("Select Excel File",lambda: threading.Thread(target=self.open_excel_file).start()),
                         ("Default Excel File",lambda: threading.Thread(target=self.default_excel_file).start()),
@@ -81,7 +85,7 @@ class App(customtkinter.CTk):
         self.change_button_color(button, "red")
 
         basepath = os.path.dirname(__file__)
-        executable_path = os.path.abspath(os.path.join(basepath, "..", "..","send_signal.exe"))
+        executable_path = os.path.abspath(os.path.join(basepath, "..", "..","send_signal_fake.exe"))
         executable_dir = os.path.dirname(executable_path)
         try:
              # Run the executable and capture the output
@@ -133,7 +137,7 @@ class App(customtkinter.CTk):
         self.OutputBox.delete(1.0, customtkinter.END)
         self.OutputBox.insert(customtkinter.END, f"Executing {multiple_time} times.\n")
         basepath = os.path.dirname(__file__)
-        executable_path = os.path.abspath(os.path.join(basepath, "..", "..","send_signal.exe"))
+        executable_path = os.path.abspath(os.path.join(basepath, "..", "..","send_signal_fake.exe"))
         executable_dir = os.path.dirname(executable_path)
         for i in range(0,multiple_time):
             if self.abort_flag:  # Check abort flag
@@ -157,6 +161,18 @@ class App(customtkinter.CTk):
         
         self.OutputBox.insert(customtkinter.END, f"\n Multiple {i+1} times completed.")
         self.change_button_color(button, original_color) # Revert button color to original
+
+    def execute_manual_multi(self):
+        text = self.entry.get()
+        if text == "" :
+            self.OutputBox.delete(1.0, customtkinter.END)
+            self.OutputBox.insert(customtkinter.END, f"You have entered nothing. Please enter numeric value in Muliplte Entry text box.")
+        iteration = int(text)
+        if iteration >= 30 :
+            self.OutputBox.delete(1.0, customtkinter.END)
+            self.OutputBox.insert(customtkinter.END, f"Please enter the values less than or equal 30 in Muliplte Entry text box. ")
+        else:
+            self.execute_multi(iteration)
 
     def abort(self):
         self.abort_flag = True  # Set abort flag
