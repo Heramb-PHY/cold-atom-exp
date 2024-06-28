@@ -36,7 +36,9 @@ class App(customtkinter.CTk):
 
         basepath = os.path.dirname(__file__)
         self.excel_file_path = os.path.abspath(os.path.join(basepath, "..", "time_sequence.xlsx"))  #  saved Excel file path
-
+        self.address_file_path = os.path.abspath(os.path.join(basepath, "..", "working_address.txt"))
+        with open (self.address_file_path,"w") as f:
+            f.write(self.excel_file_path)
         attributes_1 = [
                       ("Plot timeline",self.button_callback),
                       ("Generate Text File",lambda: threading.Thread(target=self.Generate_text_file).start()),
@@ -45,7 +47,9 @@ class App(customtkinter.CTk):
         self.button_frame_1 = ButtonFrame(self,attributes=attributes_1)
         self.button_frame_1.grid(row=0, column=0, padx=10, pady=(10, 0), sticky="nsw")
 
-        attributes_2 = [("Select Excel File",self.button_callback),("Default Excel File",self.abort),("Abort",self.abort)]
+        attributes_2 = [("Select Excel File",lambda: threading.Thread(target=self.open_excel_file).start()),
+                        ("Default Excel File",lambda: threading.Thread(target=self.default_excel_file).start()),
+                        ("Abort",self.abort)]
         self.button_frame_2 = ButtonFrame(self,attributes=attributes_2)
         self.button_frame_2.grid(row=0, column=1, padx=10, pady=(10, 0), sticky="nsw")
 
@@ -162,6 +166,24 @@ class App(customtkinter.CTk):
 
     def save_excel_file(self):
         pass
+
+    def open_excel_file(self):
+        file = customtkinter.filedialog.askopenfile(mode='r',filetypes=[("Excel files",'*.xlsx')])
+        if file:
+            self.excel_file_path = os.path.abspath(file.name)
+            with open (self.address_file_path,"w") as f:
+                    f.write(self.excel_file_path)
+            self.OutputBox.delete(1.0, customtkinter.END)
+            self.OutputBox.insert(customtkinter.END, f"Excel file at location {self.excel_file_path} is selected. ")
+
+    def default_excel_file(self):
+        basepath = os.path.dirname(__file__)
+        self.excel_file_path = os.path.abspath(os.path.join(basepath, "..", "time_sequence.xlsx"))  #  saved Excel file path
+        self.address_file_path = os.path.abspath(os.path.join(basepath, "..", "working_address.txt"))
+        with open (self.address_file_path,"w") as f:
+            f.write(self.excel_file_path)
+        self.OutputBox.delete(1.0, customtkinter.END)
+        self.OutputBox.insert(customtkinter.END, f"Default Excel file {self.excel_file_path} is selected. ")
     
 if __name__ == "__main__":
     app = App()
