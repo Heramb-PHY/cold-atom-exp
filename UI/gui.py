@@ -112,10 +112,11 @@ class App(customtkinter.CTk):
              # Run the executable and capture the output
             result = subprocess.run(["python",executable_path], cwd=executable_dir,capture_output=True, text=True)
             output = result.stdout
-            
+            error = result.stderr
             # Display the output in the Text widget
             self.OutputBox.delete(1.0, customtkinter.END)
             self.OutputBox.insert(customtkinter.END, output)
+            self.OutputBox.insert(customtkinter.END, error)
         except Exception as e:
             # Handle exceptions (e.g., file not found, permissions issues)
             self.OutputBox.delete(1.0, customtkinter.END)
