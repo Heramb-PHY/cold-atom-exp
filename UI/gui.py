@@ -77,7 +77,7 @@ class App(customtkinter.CTk):
         self.change_button_color(button, "red")
 
         basepath = os.path.dirname(__file__)
-        executable_path = os.path.abspath(os.path.join(basepath, "..", "..","send_signal_fake.exe"))
+        executable_path = os.path.abspath(os.path.join(basepath, "..", "..","send_signal.exe"))
         executable_dir = os.path.dirname(executable_path)
         try:
              # Run the executable and capture the output
@@ -128,7 +128,7 @@ class App(customtkinter.CTk):
         self.OutputBox.delete(1.0, customtkinter.END)
         self.OutputBox.insert(customtkinter.END, f"Executing {multiple_time} times.\n")
         basepath = os.path.dirname(__file__)
-        executable_path = os.path.abspath(os.path.join(basepath, "..", "..","send_signal_fake.exe"))
+        executable_path = os.path.abspath(os.path.join(basepath, "..", "..","send_signal.exe"))
         executable_dir = os.path.dirname(executable_path)
         for i in range(0,multiple_time):
             if self.abort_flag:  # Check abort flag
