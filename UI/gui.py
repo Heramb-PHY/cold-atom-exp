@@ -55,6 +55,8 @@ class App(customtkinter.CTk):
                         ("Default Excel File",lambda: threading.Thread(target=self.default_excel_file).start()),
                         ("Abort",self.abort)]
         self.button_frame_2 = ButtonFrame(self,attributes=attributes_2)
+        self.OutputBox_filename = customtkinter.CTkLabel(self.button_frame_2,text="Default Excel file",font=("Cascadia Code",12))
+        self.OutputBox_filename.grid(row=0,column=0,padx=10, pady=(10, 0), sticky="nsw")
         self.button_frame_2.grid(row=0, column=1, padx=10, pady=(10, 0), sticky="nsw")
 
         self.OutputBox = OutputBox(self)
@@ -192,6 +194,9 @@ class App(customtkinter.CTk):
                     f.write(self.excel_file_path)
             self.OutputBox.delete(1.0, customtkinter.END)
             self.OutputBox.insert(customtkinter.END, f"Excel file at location {self.excel_file_path} is selected. ")
+            # Extract the file name and update the label
+            file_name = os.path.basename(file.name)
+            self.OutputBox_filename.configure(text=file_name)
 
     def default_excel_file(self):
         basepath = os.path.dirname(__file__)
