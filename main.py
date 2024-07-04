@@ -6,7 +6,7 @@ from functools import reduce
 
 with open ("working_address.txt","r") as f:
     address_of_timeline_file = f.read()
-address_of_timeline_file = "time_sequence.xlsx"
+#address_of_timeline_file = "time_sequence.xlsx"
 
 clk_time = 2     # Clk time is 2 microseconds = 500kHz
 
