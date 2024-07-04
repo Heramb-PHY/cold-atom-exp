@@ -31,7 +31,7 @@ if len(time_repeat_location) == 1:
         df2.at[0,"Time"] = 10000 # Adding delay of 10 ms second for each iteration
         df2.at[time_repeat_location[0][0],"Time"] = time_repeat_item
         extended_df = pd.concat([extended_df,df2],ignore_index=True)
-    #extended_df.to_excel("2_time_repeated.xlsx",engine='openpyxl') # to check occasionally
+#    extended_df.to_excel("sequence_info/2_time_repeated.xlsx",engine='openpyxl') # to check occasionally
     df = extended_df
 #------------time_repeatblock complete---------#
 
@@ -85,14 +85,14 @@ def check_consecutive(df):
 
 check_consecutive(df)
 
-#df.to_excel("3_time_info.xlsx",engine='openpyxl')  # to check occasionally
+#df.to_excel("sequence_info/3_time_info.xlsx",engine='openpyxl')  # to check occasionally
 # Block to convert user input of analog signal to required number using calibrated curve
 for idx, row in df.iterrows():
     instru = row["Instrument"]
     stat = row["status"]
     if instruments[instru].channel.type == "A":
         df.at[idx, "status"] = instru_func[instru](float(stat))
-#df.to_excel("4_analog_trans.xlsx",engine='openpyxl')  # to check occasionally
+#df.to_excel("sequence_info/4_analog_trans.xlsx",engine='openpyxl')  # to check occasionally
 def merge_lists(x):
     if isinstance(x, list):
         return [item for sublist in x for item in sublist]
@@ -100,7 +100,7 @@ def merge_lists(x):
         return x
 df_merged = df.groupby('Absolute time').agg({'Instrument': list,'Time': list, 'status': merge_lists, 'Channel Object': merge_lists, 'Cumulitive time': list,'Instrument delay': list }).reset_index()
 
-#df_merged.to_excel("5_merging.xlsx",engine='openpyxl')  # to check occasionally
+#df_merged.to_excel("sequence_info/5_merging.xlsx",engine='openpyxl')  # to check occasionally
 
 def generate_data(x, y,z):
     if isinstance(x, np.ndarray) and isinstance(y, np.ndarray):
@@ -116,7 +116,7 @@ def generate_data(x, y,z):
 #df["data"] = df.apply(lambda x:x["Channel Object"].gen_data(x["status"]), axis=1)# gen_data(df["status"]))
 df_merged["signal number"] = (df_merged['Absolute time'] / 2).astype(int)
 df_merged["data"] = df_merged.apply(lambda row:generate_data(row['Channel Object'],row['status'],row['signal number']), axis=1)# gen_data(df["status"]))
-#df_merged.to_excel("6_with_data.xlsx",engine='openpyxl')
+#df_merged.to_excel("sequence_info/6_with_data.xlsx",engine='openpyxl')
 # Define a lambda function to convert binary lists to integers
 to_integer = lambda binary_list: reduce(lambda x, y: (x << 1) | y, binary_list)
 df_merged['integer_value'] = df_merged['data'].apply(to_integer)
