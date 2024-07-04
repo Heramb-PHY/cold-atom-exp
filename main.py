@@ -6,11 +6,11 @@ from functools import reduce
 
 with open ("working_address.txt","r") as f:
     address_of_timeline_file = f.read()
-#address_of_timeline_file = "time_sequence.xlsx"
+address_of_timeline_file = "time_sequence.xlsx"
 
 clk_time = 2     # Clk time is 2 microseconds = 500kHz
 
-df = pd.read_excel(address_of_timeline_file,sheet_name="time_sequence",usecols=["Instrument","Time","status","Time_rep"],dtype={"Instrument":str,"Time":int,"status":float,"Time_rep":str},na_filter=False) # reading time sequence file
+df = pd.read_excel(address_of_timeline_file,sheet_name="time_sequence",usecols=["Instrument","Time","status","Time_rep","status_rep"],dtype={"Instrument":str,"Time":int,"status":float,"Time_rep":str,"status_rep":str},na_filter=False) # reading time sequence file
 #df.to_excel("1_user_input.xlsx",engine='openpyxl') # to check occasionally
 
 #----------------------------------- to check time repeatition-------------------------------------------------------------#
@@ -34,6 +34,28 @@ if len(time_repeat_location) == 1:
     #extended_df.to_excel("2_time_repeated.xlsx",engine='openpyxl') # to check occasionally
     df = extended_df
 #------------time_repeatblock complete---------#
+
+#-------------status_repeatblock starts--------#
+status_repeat_location = []
+for index, value in df["status_rep"].items():  # checking how many row contains repeation symbol
+    if ':' in value or '|' in value:
+        status_repeat_location.append((index, value))
+if len(status_repeat_location) > 1:
+    raise RuntimeError(f"Row: {status_repeat_location[0]} and {status_repeat_location[1]} have : and | symbols repeated " )
+if len(status_repeat_location) == 1:
+    print(df["Instrument"][status_repeat_location[0][0]],"instrument will be repeated.")
+    status_repeat_list = get_multiple_status(status_repeat_location[0][1])
+    print(f"This experiment will be done {len(status_repeat_list)} times for {df["Instrument"][status_repeat_location[0][0]]} \n for status value {status_repeat_list} . ")
+    df.at[status_repeat_location[0][0],"status"] = status_repeat_list[0]
+    extended_df = df.copy()
+    for status_repeat_item in status_repeat_list[1:]:
+        df2 = df.copy()
+        df2.at[0,"Time"] = 10000 # Adding delay of 10 ms second for each iteration
+        df2.at[status_repeat_location[0][0],"status"] = status_repeat_item
+        extended_df = pd.concat([extended_df,df2],ignore_index=True)
+    extended_df.to_excel("2_status_repeated.xlsx",engine='openpyxl') # to check occasionally
+    df = extended_df
+#-------------status_repeatblock completed--------#
 
 # adding new columns in dataframe
 df["Channel Object"] = df["Instrument"].apply(lambda x: instruments[x].channel)
